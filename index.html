@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="1280*720; text/html; charset=UTF-8">
+	    <meta http-equiv="pragma" content="no-cache">
+	    <meta http-equiv="cache-control" content="no-cache">
+    	<meta http-equiv="expires" content="0">
+		<title>党建首页</title>
+		<link rel="stylesheet" href="css/common.css" />
+		<style type="text/css">
+			body{
+				position: relative;
+				width:1280px;
+				height:720px;
+				background:url(images/index-bg.png) no-repeat;
+				color:#FBFBFB;
+			}
+			.scroll{
+				position:absolute;
+				width:500px;
+				top:52px;
+				left:200px;
+				font-size:20px;
+			}
+			.menu-content{
+				position:absolute;
+				width:1126px;
+				height:60px;
+				line-height:60px;
+				top:110px;
+				left:74px;
+				font-size:24px;
+			}
+			.menu-content li{
+				display:block;
+				float:left;
+				width:100px;
+				height:42px;
+				line-height:42px;
+				text-align: center;
+				margin-left:70px;
+				margin-top:9px;
+			}
+			.menu-content li:first-child{
+				margin-left:32px;
+				width:50px;
+			}
+			.recommend{
+				position:absolute;
+				width:293px;
+				top:190px;
+				left:903px;
+			}
+			.recommend ul li{
+				display: block;
+				width:293px;
+				height:168px;
+				margin-top:7px;
+			}
+			.recommend li:first-child{
+				margin-top:0;
+			}
+			.recommend img{
+				display: block;
+				width:293px;
+				height:168px;
+				vertical-align: middle;
+			}
+			.last-li{
+				height:114px;
+			}
+			.last-li img{
+				height:114px;
+			}
+			.menu-focus{
+				color:black !important;
+				background-color:gold;
+			}
+			.letter-focus{
+				position: absolute;
+				width: 293px;
+    			height: 168px;
+    			border:2px solid #DAA520;
+			}
+			.letter-focus1{
+				position: absolute;
+				width: 293px;
+    			height: 114px;
+    			border:2px solid #DAA520;
+			}
+			.tips{
+				position:absolute;
+				top: 660px;
+				left: 100px;
+				font-size:24px;
+			}
+			.on{
+				color: #DAA520;
+			}
+			.onlineFocus {
+				position: absolute;
+				width: 808px;
+				height: 466px;
+				left: 82px;
+				top: 186px;
+				border: 2px solid #DAA520;
+			}
+		</style>
+	</head>
+	<body onunload="destroyTVWindow()">
+	<div class="num" style="position: absolute;color: red;font-size: 24px;top: 50px;left: 50px;"></div>
+		<div class="focus"></div>
+		<div class="scroll">
+			<marquee>学习共产党党章党规，学习贯彻习近平总书记系列重要讲话精神，做合格党员。</marquee>
+		</div>
+		<div class="menu-content">
+			<ul>
+				<li>首页</li>
+				<li>两学一做</li>
+				<li>理论宣讲</li>
+				<li>政策解读</li>
+				<li>党员风采</li>
+				<li>实用技术</li>
+				<li>民生服务</li>
+			</ul>
+		</div>
+		<div class="recommend">
+			<ul>
+				
+			</ul>
+		</div>
+		<div class="tips">
+			按遥控器 "信息" 键进入直播全屏,按 "后退" 键返回
+		</div>
+		<!-- log这个div不要加style属性，否则iPanel3.0的盒子不能正常加载出视频，要按一个键之后才能出视频 -->
+		<div id="log">
+			<img style="display:none" src="" />
+		</div>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js" ></script>
+		<script type="text/javascript" src="js/action.js" ></script>
+		<script type="text/javascript" src="js/showlist.js" ></script>
+		<script type="text/javascript" src="common/js/Vodcontrol.js" ></script>
+		<script type="text/javascript">
+			function initPage(){
+				setTimeout('playChannel();',2000);
+				//getGround();
+		    	Action.focusPos = "MENU";
+		    	getMenus();
+		    	getLetter();
+		    }
+			var portalFrequency = '665:794000:64:6875';	//频点参数
+			var playChannelFalse = false;
+			var curState = 0;
+			var isTrue = true;
+			function getGround(){
+				$.ajax({
+		    		type:"get",
+		    		url:"/portal/portal/video/loginAuth?stbNo="+getStbNo(),
+		    		dataType:'json',
+		    		success:function(data) {
+		    			getPiontInfo(data.usergroup);
+		    		}
+		    	});
+			}
+			
+			function getPiontInfo(temp){
+				$.ajax({
+		    		type:"get",
+		    		url:"/portal/portal/video/getTsChannel?usergroup="+temp+"&channelName=CCTV-1",
+		    		dataType:'json',
+		    		success:function(data) {
+		    			var info = data.info[0];
+		    			portalFrequency = info.serviceId+":"+info.frequence+":"+info.qam+":"+info.symbolrate;
+		    			setTimeout('playChannel();',2000);
+		    		}
+		    	});
+			}
+			/*停止视频，关闭视频窗口*/
+			function destroyTVWindow(){
+				mpeg_open();
+				mpeg_write('CableTVWindowDestory','');
+				mpeg_write('JseBrowserControl','status:1');
+				//mpeg_write("MpegWidowState","Y");
+				mpeg_close();
+			}
+			 
+			//直播
+			function playChannel(){
+				//winSize : "75, 175, 498, 400"  left  top  width  height
+				mpeg_open();
+				mpeg_write('CableTVWindowDestory','0');
+				mpeg_write('CableTVWindowCreate','82,190,812,470');
+				//mpeg_write('CableTVChannelName','CJBD');
+				mpeg_write('CableTVSetChannel',portalFrequency);
+				playChannelFalse = true;
+				//如果是大亚 的盒子，则不能设置mpeg_write('CableTVFullScreen', '0');
+				if(navigator.userAgent.indexOf('iPanel') < 0 || (navigator.userAgent.indexOf('iPanel') >= 0 && navigator.userAgent.indexOf('arm') < 0)){
+					mpeg_write('CableTVFullScreen', '0');
+				}
+//				if(!DMX.Browser.iPanel30){
+//					mpeg_write('JseBrowserControl','status:1');
+//				}
+				//mpeg_write("MpegWidowState","N");
+				curState=0;
+				document.getElementById("log").innerHTML="";//加上这句代码可解决大亚盒子视频延迟播放的问题
+			}
+			
+			//直播全屏
+			function ScreenAll(){
+				 if(curState==0)
+				 {
+				 	$("body").hide();
+					mpeg_open();
+					mpeg_write('CableTVFullScreen','1');
+					mpeg_write('CableTVWindowCreate','1,1,1279,719');
+					mpeg_write('JseBrowserControl','status:0');
+					//mpeg_write("MpegWidowState","Y");
+					//mpeg_write('CableTVWindowCreate','1,1,719,575');
+					curState=1;
+					isTrue = false;
+				 }else{
+				 	$("body").show();
+					mpeg_open();
+					mpeg_write('JseBrowserControl','status:1');
+					mpeg_write('CableTVFullScreen','0');
+					mpeg_write('CableTVWindowCreate','82,190,812,470');	
+					//mpeg_write("MpegWidowState","N");
+					//document.getElementById("log").innerHTML="";
+					curState=0;
+					isTrue = true;
+				 }
+			}
+ 
+			var menuList = [];
+		    var menuListObj;
+		
+		    var menuFocusPos = 0;
+		    var menuPosition = 0;
+		    function getMenus() {
+		        menuList = [
+		            {categoryId: "1061195", name: "首页"},
+		            {categoryId: "1057929", name: "两学一做"},
+		            {categoryId: "1057930", name: "理论宣讲"},
+		            {categoryId: "1057931", name: "政策解读"},
+		            {categoryId: "1057932", name: "党员风采"},
+		            {categoryId: "1057933", name: "实用技术"},
+		            {categoryId: "1057934", name: "民生服务"}
+		        ];
+		        menuShow();
+		        menuEffect();
+		    }
+		
+		    function menuShow() {
+		        var length = menuList.length;
+		        if (length > 7) length = 7;
+		        menuListObj = new showList(length, menuList.length, 0, 42, window);
+		        menuListObj.dataList = menuList;
+		        menuListObj.focusPos = menuFocusPos;
+		        menuListObj.position = menuPosition;
+		        menuListObj.showLoop = false;
+		        menuListObj.focusLoop = false;
+		        menuListObj.focusPos = 0;
+		        menuListObj.haveData = function (obj) {
+		            $(".menu-content ul li:eq(0)").addClass("on");
+		        };
+		        menuListObj.notData = function (obj) {
+		
+		        };
+		        menuListObj.startShow();
+		    }
+		
+		    function menuEffect() {
+		        if (Action.focusPos == "MENU") {
+		        	$(".focus").removeAttr("style");
+					$(".focus").attr("class", "focus");
+                    //$('.focus').removeClass('onlineFocus');
+		            $(".menu-content ul li:eq("+menuListObj.focusPos+")").addClass("menu-focus").siblings().removeClass("menu-focus");
+		        }
+		    }
+		    
+		    var letterList = [];
+		    var letterListObj; 
+		    
+		    function getLetter() {
+		        $.ajax({
+		    		type:"get",
+		    		url:"/portal/interface/letter/list?categoryId=1061195",
+		    		dataType:'json',
+		    		success:function(data) {
+		    			letterList = data.response;
+		    			letterShow();
+		        		letterEffect();
+		    		}
+		    	});
+		    }
+		
+		    function letterShow() {
+		        var length = letterList.length;
+		        if (length > 3) length = 3;
+		        letterListObj = new showList(length, letterList.length, 0, 42, window);
+		        letterListObj.dataList = letterList;
+		        letterListObj.focusPos = 0;
+		        letterListObj.position = 0;
+		        letterListObj.showLoop = false;
+		        letterListObj.focusLoop = false;
+		        letterListObj.focusPos = 0;
+		        letterListObj.haveData = function (obj) {
+		        	var temp = letterListObj.dataList[obj.dataPos];
+		        	if(obj.dataPos==2){
+		        		var li="<li class='last-li'><img src='/vpg/images/posters/recommend/"+temp.img_url+"' /></li>";
+		        	}else{
+		        		var li="<li><img src='/vpg/images/posters/recommend/"+temp.img_url+"' /></li>";
+		        	}
+		            $(".recommend ul").append(li);
+		            
+		        };
+		        letterListObj.notData = function (obj) {
+		
+		        };
+		        letterListObj.startShow();
+		    }
+		
+		    function letterEffect() {
+//		        $(".focus").removeAttr("style");
+//		        $(".focus").attr("class", "focus");
+				$('.focus').removeClass('onlineFocus');
+		        if (Action.focusPos == "LETTER") {
+		           if(letterListObj.focusPos==2){
+		           		$(".focus").addClass("letter-focus1").removeClass("letter-focus");
+		           }else{
+		           		$(".focus").addClass("letter-focus").removeClass("letter-focus1");
+		           }
+		           $(".focus").css({"top":188+letterListObj.focusPos*175+"px","left":"901px"});
+		        }
+		    }
+		    
+		    
+		    function onlineEffect() {
+				if(Action.focusPos == 'ONLINE') {
+                    $(".focus").removeAttr("style");
+                    $(".focus").attr("class", "focus");
+                    $('.focus').addClass('onlineFocus');
+				}
+            }
+		    function eventHandle(keyCode) {
+		        if(!isTrue){
+                    switch (keyCode){
+                        case Action.KEY.BACK:
+							ScreenAll();
+                            event.preventDefault();
+                            break;
+                        case Action.KEY.EXIT:
+                            ScreenAll();
+                            event.preventDefault();
+                            break;
+						default:
+                            $(".num").text(keyCode);
+                            ScreenAll();
+						    break;
+					}
+				}else{
+                    switch (keyCode) {
+                        case Action.KEY.UP:
+                            if(Action.focusPos=="LETTER") {
+                                if(letterListObj.focusPos == 0){
+                                    Action.focusPos = "MENU";
+                                    menuEffect();
+                                }else{
+                                    letterListObj.changeList(-1);
+                                    letterEffect();
+                                }
+                            }
+                            break;
+                        case Action.KEY.DOWN:
+                            if(Action.focusPos == "MENU") {
+                                //Action.focusPos = "LETTER";
+                                Action.focusPos = "ONLINE";
+                                onlineEffect();
+                                //letterEffect();
+                            }else if(Action.focusPos == "LETTER") {
+                                letterListObj.changeList(1);
+                                letterEffect();
+                            }
+                            break;
+                        case Action.KEY.LEFT:
+                            if(Action.focusPos == "MENU") {
+                                menuListObj.focusUp ();
+                                menuEffect();
+                            }else if(Action.focusPos == "LETTER") {
+                                Action.focusPos = 'ONLINE';
+                                onlineEffect();
+                            }
+                            break;
+                        case Action.KEY.RIGHT:
+                            if(Action.focusPos == "MENU") {
+                                menuListObj.focusDown();
+                                menuEffect();
+                            }else if(Action.focusPos == "ONLINE") {
+                                Action.focusPos = 'LETTER';
+                                letterEffect();
+                            }
+                            break;
+
+                        case Action.KEY.ENTER:
+                            if(Action.focusPos == "MENU") {
+                                if(menuListObj.focusPos==0){
+                                    window.location.href="index.html";
+                                }else{
+                                    var temp = menuListObj.dataList[menuListObj.focusPos];
+                                    window.location.href = "sub.html?menuFocusPos="+menuListObj.focusPos+"&name="+encodeURI(temp.name)+"&id="+temp.categoryId;
+                                }
+                            }else if(Action.focusPos == "LETTER"){
+                                var temp = letterListObj.dataList[letterListObj.focusPos];
+                                window.location.href = temp.url;
+                            }else if(Action.focusPos == "ONLINE") {
+                                curState = 0;
+                                ScreenAll();
+                            }
+                            break;
+                        case Action.KEY.BACK:
+                            if(isTrue){
+                                destroyTVWindow();
+                                window.location.href = "http://172.20.222.107:8085/test_mx.html";
+                            }else{
+                                ScreenAll();
+                            }
+                            event.preventDefault();
+                            break;
+                        case Action.KEY.EXIT:
+                            destroyTVWindow();
+                            window.location.href = "http://172.20.222.107:8085/test_mx.html";
+                            event.preventDefault();
+                            break;
+                        case Action.KEY.INFO:
+                            ScreenAll();
+                            break;
+                        case 0x20:
+                        case 0x2B:
+                            mpeg_write('JseBrowserControl','status:1');
+                            break;
+
+                    }
+				}
+
+		    }
+		    
+		    $(document).ready(function(){
+		    	initPage();
+		    });
+		</script>
+	</body>
+</html>

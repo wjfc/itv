@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="1280*720; text/html; charset=UTF-8">
+	    <meta http-equiv="pragma" content="no-cache">
+	    <meta http-equiv="cache-control" content="no-cache">
+    	<meta http-equiv="expires" content="0">
+		<title>专题</title>
+		<link rel="stylesheet" href="css/common.css" />
+		<style type="text/css">
+			body{
+				position: relative;
+				width:1280px;
+				height:720px;
+				background:url(images/zhuanti-bg.jpg) no-repeat;
+				font-size:16px;
+				color:#666666;
+			}
+			.logo-jscn{
+				position:absolute;
+				top:48px;
+				left:64px;
+				z-index:50;
+			}
+			.logo-jsdj{
+				position:absolute;
+				top:48px;
+				left:980px;
+				z-index:50;
+			}
+			.line{
+				position: absolute;
+				font-size:30px;
+				color:#FBFBFB;
+				top:48px;
+				left:190px;
+				border-left:2px solid #FBFBFB;
+				padding-left:20px;
+				z-index: 50;
+			}
+			.letter-top{
+				position:absolute;
+				width:1280px;
+				height:313px;
+				top:0px;
+				left:0px;
+				z-index:40;
+			}
+			.top-pic{
+				width:1280px;
+				height:313px;
+			}
+			.letter-center{
+				position:absolute;
+				top:329px;
+				left:143px;
+			}
+			.letter-center ul li{
+				position:relative;
+				display: block;
+				float:left;
+				width:225px;
+				height:164px;
+				margin-left:31px;
+			}
+			.letter-center li:first-child{
+				margin-left:0px;
+			}
+			.letter-center img{
+				position: absolute;
+				width:225px;
+				height:128px;
+				vertical-align:middle;
+				top:0px;
+				left:0px;
+			}
+			.title{
+				position:absolute;
+				width:225px;
+				bottom:0px;
+				left:0px;
+				text-align: center;
+			}
+			.info-list{
+				position:absolute;
+				width:940px;
+				top:514px;
+				left:170px;
+				font-size: 20px;
+			}
+			.info-list ul{
+				margin-left:-110px;
+				margin-top:-10px;
+			}
+			.info-list ul li{
+				display:block;
+				float: left;
+				width:415px;
+				height:36px;
+				line-height:36px;
+				margin-left:110px;
+			    margin-top:10px;
+			}
+			.info-list img{
+				display:block;
+				float:left;
+				width:13px;
+				height:12px;
+				margin-top:12px;
+			}
+			.info-list .info-title{
+				display:block;
+				float:left;
+				width:397px;
+				height:36px;
+				margin-left:5px;
+			}
+			.pageInfo{
+				position: absolute;
+				top:647px;
+				left:447px;
+				color:#000000;
+				font-size:20px;
+			}
+			.prev-btn{
+				position:absolute;
+				width:80px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left: 0px;
+				top: 0px;
+			}
+			.page{
+				position: absolute;
+				width:80px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left:135px;
+				top: 0px;
+			}
+			.next-btn{
+				position:absolute;
+				width:80px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left:270px;
+				top: 0px;
+			}
+			
+			.letter-focus{
+				position: absolute;
+				width:225px;
+				height:164px;
+				top: 327px;
+    			left: 141px;
+				border:2px solid gold;
+			}
+			
+			.info-focus{
+				background-color:#38A9C7;	
+			}
+		</style>
+	</head>
+	<body>
+		<div class="focus letter-focus">
+			
+		</div>
+		<div class="logo-jscn">
+			<img src="images/logo-jscn.png" />
+		</div>
+		<div class="line">专题</div>
+		<div class="logo-jsdj">
+			<img src="images/logo-jsdj.png" />
+		</div>
+		<div class="letter-top">
+			
+		</div>
+		<div class="letter-center">
+			<ul>
+				
+			</ul>
+		</div>
+		<div class="info-list">
+			<ul>
+				
+			</ul>
+		</div>
+		<div class="pageInfo">
+			<div class="prev-btn">上一页</div>
+			<div class="page">1/1</div>
+			<div class="next-btn">下一页</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js" ></script>
+		<script type="text/javascript" src="js/action.js" ></script>
+		<script type="text/javascript" src="js/showlist.js" ></script>
+		<script type="text/javascript" src="js/util.js" ></script>
+		<script type="text/javascript">
+			function initPage(){
+		    	getLetter();
+		    	getInfo();
+		    }
+			var id=getParam("categoryId");
+			function starScroll(obj,type,num,flag){
+		        if(obj.dataList.length!=0){
+		            var replaceSymbol = "...";
+		            var str = "";
+		            var content = "";
+		            if(flag=="title"){
+		            	str = cutString(obj.dataList[obj.lastFocusPos].title, num, replaceSymbol);
+		            	content = obj.dataList[obj.focusPos].title;
+		            }else{
+		            	str = cutString(obj.dataList[obj.lastFocusPos].name, num, replaceSymbol);
+		            	content = obj.dataList[obj.focusPos].name;
+		            }
+		            $("."+type+" "+"ul li:eq(" + obj.lastFocusPos + ")").find("div").html(str);
+		            if(getStrLength(content) >num){
+		                $("."+type+" "+"ul li:eq("+obj.focusPos+")").find("div").html("<marquee>"+content+"</marquee>");
+		            }
+		        }
+		    }
+
+		    function stopScroll(obj,type,num,flag) {
+		        if(obj.dataList.length!=0){
+		            var replaceSymbol = "...";
+		            var str = "";
+		            if(flag=="title"){
+		            	str = cutString(obj.dataList[obj.focusPos].title, num, replaceSymbol)
+		            }else{
+		            	str = cutString(obj.dataList[obj.focusPos].name, num, replaceSymbol)
+		            }
+		            $("."+type+" "+"ul li:eq(" + obj.focusPos + ")").find("div").html(str);
+		        }
+		    }
+			var letterFocusPos = 0;
+			var infoFocusPos = 0;
+			function initFocus() {
+				var specialPos = getCookie("specialPos");
+				if (specialPos != "" && specialPos != null) {
+		            Action.focusPos = specialPos;
+		        }
+
+		        var specialLetterPos = getCookie("specialLetterPos");
+				if (specialLetterPos == null || specialLetterPos == "") {
+            		letterFocusPos = 0;
+		        } else {
+		            letterFocusPos = parseInt(specialLetterPos);
+		        }
+		        
+		        var specialInfoPos = getCookie("specialInfoPos");
+				if (specialInfoPos == null || specialInfoPos == "") {
+            		infoFocusPos = 0;
+		        } else {
+		            infoFocusPos = parseInt(specialInfoPos);
+		        }
+		        
+		        var specialCurPage = getCookie("specialCurPage");
+		        if (specialCurPage == null || specialCurPage == "") {
+            		curPage = 1;
+		        } else {
+		            curPage = parseInt(specialCurPage);
+		        }
+			}
+			
+		    var letterList = [];
+		    var letterListObj; 
+		    
+		    function getLetter() {
+		       $.ajax({
+		    		type:"get",
+		    		url:"/portal/interface/letter/list?categoryId="+id,
+		    		dataType:'json',
+		    		success:function(data) {
+		    			letterList = data.response.slice(1,5);
+		    			$(".letter-top").append("<img class='top-pic' src='/vpg/images/posters/recommend/"+data.response[0].img_url+"' />");
+		    			letterShow();
+		        		letterEffect();
+		    		}
+		    	});
+		    }
+		
+		    function letterShow() {
+		        var length = letterList.length;
+		        if (length > 4) length = 4;
+		        letterListObj = new showList(length, letterList.length, 0, 42, window);
+		        letterListObj.dataList = letterList;
+		        letterListObj.focusPos = letterFocusPos;
+		        letterListObj.position = letterFocusPos;
+		        letterListObj.showLoop = false;
+		        letterListObj.focusLoop = false;
+		        letterListObj.haveData = function (obj) {
+		        	var temp = letterListObj.dataList[obj.dataPos];
+		        	var title = cutString(temp.title,18, "...");
+		        	var li="<li><img src='/vpg/images/posters/recommend/"+temp.img_url+"' />"+
+		        	"<div class='title'>"+title+"</div></li>";
+		            $(".letter-center ul").append(li);
+		            
+		        };
+		        letterListObj.notData = function (obj) {
+		
+		        };
+		        letterListObj.startShow();
+		    }
+		
+		    function letterEffect() {
+		        if (Action.focusPos == "LETTER") {
+		           starScroll(letterListObj,"letter-center",18,"title");	
+		           $(".info-list li").removeClass("info-focus");
+		           $(".focus").addClass("letter-focus");
+		           $(".focus").css({"left":141+letterListObj.focusPos*256+"px","top":"327px"});
+		        }
+		    }
+		    
+		    var infoList = [];
+		    var infoListObj; 
+		    var curPage=1;
+		    var totalPage=1;
+		    function getInfo() {
+		       $.ajax({
+		    		type:"get",
+		    		url:"/portal/interface/video/list?categoryId="+id+"&pageSize=6&pageNum="+curPage,
+		    		dataType:'json',
+		    		success:function(data) {
+		    			totalPage = data.pageInfo.totalPage;
+		    			var page = curPage+"/"+data.pageInfo.totalPage;
+		    			$(".page").text(page);
+		    			infoList = data.response;
+		    			infoShow();
+		        		infoEffect();
+		    		}
+		    	});
+		    }
+		
+		    function infoShow() {
+		    	$(".info-list ul").html("");
+		        var length = infoList.length;
+		        if (length > 6) length = 6;
+		        infoListObj = new showList(length, infoList.length, 0, 42, window);
+		        infoListObj.dataList = infoList;
+		        infoListObj.focusPos = infoFocusPos;
+		        infoListObj.position = infoFocusPos;
+		        infoListObj.showLoop = false;
+		        infoListObj.focusLoop = false;
+		        infoListObj.haveData = function (obj) {
+		        	var temp = infoListObj.dataList[obj.dataPos];
+		        	var name = cutString(temp.name,36, "...");
+                    console.log(name);
+                    var li="<li><img src='images/icon.png' />"+
+		        	"<div class='info-title'>"+temp.name+"</div></li>";
+		            $(".info-list ul").append(li);
+		            
+		        };
+		        infoListObj.notData = function (obj) {
+		
+		        };
+		        infoListObj.startShow();
+		    }
+		
+		    function infoEffect() {
+		        if (Action.focusPos == "INFO") {
+		        	starScroll(infoListObj,"info-list",40,"name");
+		        	$(".prev-btn").removeClass("info-focus");
+		        	$(".next-btn").removeClass("info-focus");
+		            $(".focus").removeAttr("style");
+		        	$(".focus").attr("class", "focus");
+		        	$(".info-list ul li:eq("+infoListObj.focusPos+")").addClass("info-focus").siblings().removeClass("info-focus");
+		        }
+		    }
+		    
+		    function toPage(num){
+				if(num>0&&num<=totalPage){
+					curPage=num;
+					infoFocusPos = 0;
+					getInfo();
+				}
+			}
+		    
+		    function pageEffect(){
+				if(Action.focusPos == "NEXT") {
+					$(".info-list li").removeClass("info-focus");
+					$(".next-btn").addClass("info-focus");
+					$(".prev-btn").removeClass("info-focus");
+				}else if(Action.focusPos == "PREV") {
+					$(".info-list li").removeClass("info-focus");
+					$(".next-btn").removeClass("info-focus");
+					$(".prev-btn").addClass("info-focus");
+				}
+		    }
+		    
+		    function eventHandle(keyCode) {
+		        switch (keyCode) {
+		            case Action.KEY.UP:
+		                if(Action.focusPos == "INFO") {
+		                	if(infoListObj.focusPos<2){
+		                		stopScroll(infoListObj,"info-list",40,"name");
+		                		Action.focusPos = "LETTER";
+		                		letterEffect();
+		                	}else{
+		                		infoListObj.changeList(-2);
+		                		infoEffect();
+		                	}
+		                }else if(Action.focusPos == "NEXT"||Action.focusPos == "PREV") {
+		                	Action.focusPos = "INFO";
+		                	infoEffect();
+		                }
+		                break;
+		            case Action.KEY.DOWN:
+		                if(Action.focusPos == "LETTER") {
+		                	stopScroll(letterListObj,"letter-center",18,"title");
+		                	starScroll(infoListObj,"info-list",40,"name");
+		                	Action.focusPos = "INFO";
+		                	infoEffect();
+		                }else if(Action.focusPos == "INFO") {
+		                	if(infoListObj.focusPos==infoList.length-1||infoListObj.focusPos==infoList.length-2){
+		                		stopScroll(infoListObj,"info-list",40,"name");
+		                		Action.focusPos = "NEXT";
+		                		pageEffect();
+		                	}else{
+		                		infoListObj.changeList(2);
+		                		infoEffect();
+		                	}
+		                }
+		                break;
+		            case Action.KEY.LEFT:
+		                if(Action.focusPos == "LETTER") {
+		                	letterListObj.focusUp();
+		                	letterEffect();
+		                }else if(Action.focusPos == "INFO") {
+		                	infoListObj.focusUp();
+		                	infoEffect();
+		                }else if(Action.focusPos == "NEXT") {
+		                	Action.focusPos = "PREV";
+		                	pageEffect();
+		                }
+		                break;
+		            case Action.KEY.RIGHT:
+		                if(Action.focusPos == "LETTER") {
+		                	letterListObj.focusDown();
+		                	letterEffect();
+		                }else if(Action.focusPos == "INFO") {
+		                	infoListObj.focusDown();
+		                	infoEffect();
+		                }else if(Action.focusPos == "PREV") {
+		                	Action.focusPos = "NEXT";
+		                	pageEffect();
+		                }
+		                break;
+		
+		            case Action.KEY.ENTER:
+		                if(Action.focusPos == "LETTER"){
+		                	delCookie();
+		               	    setLetterCookie();
+		                	var temp = letterListObj.dataList[letterListObj.focusPos];
+		                	window.location.href = temp.url;
+		                }else if(Action.focusPos == "INFO") {
+		                	delCookie(); 
+		                	setInfoCookie();
+		                	var temp = infoListObj.dataList[infoListObj.focusPos];
+		                	window.location.href = "common/iFengPlayer.html?id="+temp.id+"&movassetid="+temp.movassetid;
+		                }else if(Action.focusPos == "NEXT") {
+		                	toPage(curPage+1);
+		                }else if(Action.focusPos == "PREV") {
+		                	toPage(curPage-1);
+		                }
+		                break;
+		            case Action.KEY.PAGEDOWN:
+		            	toPage(curPage+1);
+		            	break;
+		            case Action.KEY.PAGEUP:
+		            	toPage(curPage-1);
+		            	break;	
+		            case Action.KEY.BACK:
+		                delCookie();
+		                location.href="index.html";               
+		                event.preventDefault();
+		                break;
+		            case Action.KEY.EXIT:
+		                delCookie();
+		                location.href="index.html";
+		                event.preventDefault();
+		                break;
+		        }
+		    }
+		    
+		    function setLetterCookie() {
+		    	setCookie("specialPos",Action.focusPos);
+		    	setCookie("specialLetterPos",letterListObj.focusPos);
+		    }
+		    
+		    function setInfoCookie() {
+		    	setCookie("specialPos",Action.focusPos);
+		    	setCookie("specialInfoPos",infoListObj.focusPos);
+		    	setCookie("specialCurPage",curPage);
+		    }
+		    
+		    function delCookie() {
+		    	DelCookie("specialPos");
+		    	DelCookie("specialLetterPos");
+		    	DelCookie("specialInfoPos");
+		    	DelCookie("specialCurPage");
+		    }
+
+            function getParam(name) {
+                var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                var r=window.location.search.substr(1).replace(new RegExp(/(amp;)/g),'').match(reg);
+                if (r != null) {
+                    return r[2];
+                }
+                return null;
+            }
+		    $(document).ready(function(){
+		    	Action.focusPos = "LETTER";
+		    	initFocus();
+		    	initPage();
+		    });
+		</script>
+	</body>
+</html>

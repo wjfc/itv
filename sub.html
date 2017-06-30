@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="1280*720; text/html; charset=UTF-8">
+	    <meta http-equiv="pragma" content="no-cache">
+	    <meta http-equiv="cache-control" content="no-cache">
+    	<meta http-equiv="expires" content="0">
+		<title>二级页</title>
+		<link rel="stylesheet" href="css/common.css" />
+		<style type="text/css">
+			body{
+				position: relative;
+				width:1280px;
+				height:720px;
+				background:url(images/second-bg.jpg) no-repeat;
+				color:#FBFBFB;
+			}
+			.line{
+				position: absolute;
+				height:40px;
+				line-height:40px;
+				font-size:30px;
+				color:#AAB6C4;
+				top:47px;
+				left:190px;
+				border-left:2px solid #AAB6C4;
+				padding-left:20px;
+				z-index: 50;
+			}
+			.menu-content{
+				position:absolute;
+				width:1126px;
+				height:60px;
+				line-height:60px;
+				top:110px;
+				left:74px;
+				font-size:24px;
+			}
+			.menu-content li{
+				display:block;
+				float:left;
+				width:100px;
+				height:42px;
+				line-height:42px;
+				text-align: center;
+				margin-left:70px;
+				margin-top:9px;
+			}
+			.menu-content li:first-child{
+				margin-left:32px;
+				width:50px;
+			}
+			.letter-center{
+				position:absolute;
+				top:183px;
+				left:81px;
+			}
+			.letter1{
+				position:absolute;
+				width:535px;
+				height:302px;
+				left:0px;
+				top:0px;
+			}
+			.letter1 img{
+				width:535px;
+				height:302px;
+				vertical-align: middle;
+			}
+			.letter2{
+				position:absolute;
+				width:261px;
+				height:152px;
+				top:316px;
+				left:0px;
+			}
+			.letter2 img{
+				width:261px;
+				height:152px;
+				vertical-align: middle;
+			}
+			.letter3{
+				position:absolute;
+				width:261px;
+				height:152px;
+				top:316px;
+				left:275px;
+			}
+			.letter3 img{
+				width:261px;
+				height:152px;
+				vertical-align: middle;
+			}
+			.info-list{
+				position: absolute;
+				color: #000000;
+				font-size:20px;
+				top: 194px;
+				left: 636px;
+			}
+			.info-list ul li{
+				display: block;
+				width:526px;
+				height:43px;
+				line-height:43px;
+				margin-top:7px;
+				margin-left:15px;
+			}
+			.pageInfo{
+				position: absolute;
+				top:610px;
+				left:690px;
+				color:#000000;
+				font-size:20px;
+			}
+			.prev-btn{
+				position:absolute;
+				width:80px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left: 0px;
+				top: 0px;
+			}
+			.page{
+				position: absolute;
+				width:100px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left:170px;
+				top: 0px;
+			}
+			.next-btn{
+				position:absolute;
+				width:80px;
+				height:32px;
+				line-height:32px;
+				text-align: center;
+				left:360px;
+				top: 0px;
+			}
+			.menu-focus{
+				color:black !important;
+				background-color:gold;
+				font-size:24px;
+			}
+			.focus{
+				z-index:50;
+			}
+			.letter-focus{
+				position:absolute;
+				width:535px;
+				height:302px;
+				top: 181px;
+    			left: 79px;
+				border:2px solid goldenrod;
+			}
+			.letter-focus1{
+				position:absolute;
+				width:261px;
+				height:152px;
+				border:2px solid goldenrod;
+			}
+			.info-focus{
+				background-color:#38A9C7;	
+			}
+			.on{
+				color: #DAA520;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="line"></div>
+		<div class="focus"></div>
+		<div class="menu-content">
+			<ul>
+				<li>首页</li>
+				<li>两学一做</li>
+				<li>理论宣讲</li>
+				<li>政策解读</li>
+				<li>党员风采</li>
+				<li>实用技术</li>
+				<li>民生服务</li>
+			</ul>
+		</div>
+		<div class="letter-center">
+			<div class="letter1">
+				
+			</div>
+			<div class="letter2">
+				
+			</div>
+			<div class="letter3">
+				
+			</div>
+		</div>
+		<div class="info-list">
+			<ul>
+				
+			</ul>
+		</div>
+		<div class="pageInfo">
+			<div class="prev-btn">上一页</div>
+			<div class="page">1/1</div>
+			<div class="next-btn">下一页</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js" ></script>
+		<script type="text/javascript" src="js/action.js" ></script>
+		<script type="text/javascript" src="js/showlist.js" ></script>
+		<script type="text/javascript" src="js/util.js" ></script>
+		<script type="text/javascript">
+			function initPage(){
+		    	$(".line").text(decodeURI(getParam("name")));
+		    	getMenus();
+		    	getLetter();
+		    	getInfo();
+		    }
+			
+			function starScroll(obj,type){
+		        if(obj.dataList.length!=0){
+		            var replaceSymbol = "...";
+		            var str = cutString(obj.dataList[obj.lastFocusPos].name, 50, replaceSymbol);
+		            $("."+type+" "+"ul li:eq(" + obj.lastFocusPos + ")").html(str);
+		            var content = obj.dataList[obj.focusPos].name;
+		            if(getStrLength(content) >50){
+		                $("."+type+" "+"ul li:eq("+obj.focusPos+")").html("<marquee class='rop'>"+obj.dataList[obj.focusPos].name+"</marquee>");
+		            }
+		        }
+		    }
+
+		    function stopScroll(obj,type) {
+		        if(obj.dataList.length!=0){
+		            var replaceSymbol = "...";
+		            var str = cutString(obj.dataList[obj.focusPos].name, 50, replaceSymbol);
+		            $("."+type+" "+"ul li:eq(" + obj.focusPos + ")").html(str);
+		        }
+		    }
+		    
+			var menuFocusPos = Number(getParam("menuFocusPos"));
+			var letterFocusPos = 0;
+			var infoFocusPos = 0;
+			function initFocus() {
+				var subPos = getCookie("subPos");
+				if (subPos != "" && subPos != null) {
+		            Action.focusPos = subPos;
+		        }
+//				var subMenuPos = getCookie("subMenuPos");
+//				if (subMenuPos == null || subMenuPos == "") {
+//          		menuFocusPos = menuFocusPos;
+//		        } else {
+//		            menuFocusPos = parseInt(subMenuPos);
+//		        }
+		        
+		        var subLetterPos = getCookie("subLetterPos");
+				if (subLetterPos == null || subLetterPos == "") {
+            		letterFocusPos = 0;
+		        } else {
+		            letterFocusPos = parseInt(subLetterPos);
+		        }
+		        
+		        var subInfoPos = getCookie("subInfoPos");
+				if (subInfoPos == null || subInfoPos == "") {
+            		infoFocusPos = 0;
+		        } else {
+		            infoFocusPos = parseInt(subInfoPos);
+		        }
+		        
+		        var subCurPage = getCookie("subCurPage");
+		        if (subCurPage == null || subCurPage == "") {
+            		curPage = 1;
+		        } else {
+		            curPage = parseInt(subCurPage);
+		        }
+			}
+			
+			var menuList = [];
+		    var menuListObj;
+		
+		    function getMenus() {
+		        menuList = [
+		             {categoryId: "1061195", name: "首页"},
+		            {categoryId: "1057929", name: "两学一做"},
+		            {categoryId: "1057930", name: "理论宣讲"},
+		            {categoryId: "1057931", name: "政策解读"},
+		            {categoryId: "1057932", name: "党员风采"},
+		            {categoryId: "1057933", name: "实用技术"},
+		            {categoryId: "1057934", name: "民生服务"}
+		        ];
+		        menuShow();
+		        menuEffect();
+		    }
+		
+		    function menuShow() {
+		        var length = menuList.length;
+		        if (length > 7) length = 7;
+		        menuListObj = new showList(length, menuList.length, 0, 42, window);
+		        menuListObj.dataList = menuList;
+		        menuListObj.focusPos = menuFocusPos;
+		        menuListObj.position = menuFocusPos;
+		        menuListObj.showLoop = false;
+		        menuListObj.focusLoop = false;
+		        menuListObj.haveData = function (obj) {
+		        	$(".menu-content ul li:eq("+getParam("menuFocusPos")+")").addClass("on");
+		        };
+		        menuListObj.notData = function (obj) {
+		
+		        };
+		        menuListObj.startShow();
+		    }
+		
+		    function menuEffect() {
+		        if (Action.focusPos == "MENU") {
+		        	$(".focus").removeClass("letter-focus");
+		        	$(".info-list li").removeClass("info-focus");
+		            $(".menu-content ul li:eq("+menuListObj.focusPos+")").addClass("menu-focus").siblings().removeClass("menu-focus");
+		        }
+		    }
+		    
+		    var letterList = [];
+		    var letterListObj; 
+		    
+		    function getLetter() {
+		    	$.ajax({
+		    		type:"get",
+		    		url:"/portal/interface/letter/list?categoryId="+getParam("id"),
+		    		dataType:'json',
+		    		success:function(data) {
+		    			letterList = data.response;
+		    			letterShow();
+		        		letterEffect();
+		    		}
+		    	});
+		    }
+		
+		    function letterShow() {
+		        var length = letterList.length;
+		        if (length > 4) length = 4;
+		        letterListObj = new showList(length, letterList.length, 0, 42, window);
+		        letterListObj.dataList = letterList;
+		        letterListObj.focusPos = letterFocusPos;
+		        letterListObj.position = letterFocusPos;
+		        letterListObj.showLoop = false;
+		        letterListObj.focusLoop = false;
+		        letterListObj.haveData = function (obj) {
+		        	var temp = letterListObj.dataList[obj.dataPos];
+		        	var pic ="<img src='/vpg/images/posters/recommend/"+temp.img_url+"' />";
+		        	$(".letter"+(obj.dataPos+1)).append(pic); 
+		        };
+		        letterListObj.notData = function (obj) {
+		
+		        };
+		        letterListObj.startShow();
+		    }
+		
+		    function letterEffect() {
+		        if (Action.focusPos == "LETTER") {
+		           $(".prev-btn").removeClass("info-focus");
+		           $(".menu-content ul li").removeClass("menu-focus");	
+		           $(".info-list li").removeClass("info-focus");
+		           if(letterListObj.focusPos==0){
+		           	     $(".focus").removeAttr("style");
+		           		$(".focus").addClass("letter-focus").removeClass("letter-focus1");
+		           }else{
+		           		$(".focus").addClass("letter-focus1").removeClass("letter-focus");
+		           		$(".focus").css({"left":79+(letterListObj.focusPos-1)*275+"px","top":"497px"});
+		           }
+		        }
+		    }
+		    
+		    var infoList = [];
+		    var infoListObj; 
+		    var curPage=1;
+		    var totalPage=1;
+		    function getInfo() {
+		    	$.ajax({
+		    		type:"get",
+		    		url:"/portal/interface/video/list?categoryId="+getParam("id")+"&pageSize=8&pageNum="+curPage,
+		    		dataType:'json',
+		    		success:function(data) {
+		    			totalPage = data.pageInfo.totalPage;
+		    			var page = curPage+"/"+data.pageInfo.totalPage;
+		    			$(".page").text(page);
+		    			infoList = data.response;
+		    			infoShow();
+		        		infoEffect();
+		    		}
+		    	});
+		    }
+		
+		    function infoShow() {
+		    	$(".info-list ul").html("");
+		        var length = infoList.length;
+		        if (length > 8) length = 8;
+		        infoListObj = new showList(length, infoList.length, 0, 42, window);
+		        infoListObj.dataList = infoList;
+		        infoListObj.focusPos = infoFocusPos;
+		        infoListObj.position = infoFocusPos;
+		        infoListObj.showLoop = false;
+		        infoListObj.focusLoop = false;
+		        infoListObj.haveData = function (obj) {
+		        	var temp = infoListObj.dataList[obj.dataPos];
+		        	var name=cutString(temp.name,50,"...");
+		        	var li="<li>"+name+"</li>";
+		            $(".info-list ul").append(li);
+		        };
+		        infoListObj.notData = function (obj) {
+		
+		        };
+		        infoListObj.startShow();
+		    }
+		
+		    function infoEffect() {
+		        if (Action.focusPos == "INFO") {
+		        	$(".prev-btn").removeClass("info-focus");
+		        	$(".next-btn").removeClass("info-focus");
+		            $(".focus").removeAttr("style");
+		        	$(".focus").attr("class", "focus");
+		        	$(".info-list ul li:eq("+infoListObj.focusPos+")").addClass("info-focus").siblings().removeClass("info-focus");
+		        	starScroll(infoListObj,"info-list");
+		        }
+		    }
+		    
+		    function toPage(num){
+				if(num>0&&num<=totalPage){
+					curPage=num;
+					infoFocusPos=0;
+					getInfo();
+				}
+			}
+		    
+		    function pageEffect(){
+		    	stopScroll(infoListObj,"info-list");
+				if(Action.focusPos == "NEXT") {
+					$(".info-list li").removeClass("info-focus");
+					$(".next-btn").addClass("info-focus");
+					$(".prev-btn").removeClass("info-focus");
+				}else if(Action.focusPos == "PREV") {
+					$(".info-list li").removeClass("info-focus");
+					$(".next-btn").removeClass("info-focus");
+					$(".prev-btn").addClass("info-focus");
+				}
+		    }
+		    
+		    function eventHandle(keyCode) {
+		        switch (keyCode) {
+		            case Action.KEY.UP:
+		                if(Action.focusPos == "INFO") {
+		                	if(infoListObj.focusPos == 0){
+		                		Action.focusPos = "MENU";
+		                		stopScroll(infoListObj,"info-list");
+		                		menuEffect();
+		                	}else{
+		                		infoListObj.changeList(-1);
+		                		infoEffect();
+		                	}
+		                }else if(Action.focusPos == "NEXT"||Action.focusPos == "PREV") {
+		                	Action.focusPos = "INFO";
+		                	infoEffect();
+		                }else if(Action.focusPos == "LETTER") {
+		                	if(letterListObj.focusPos == 1)	{
+		                		letterListObj.changeList(-1);
+		                	}else if(letterListObj.focusPos == 2) {
+		                		letterListObj.changeList(-2);
+		                	}else{
+		                		Action.focusPos = "MENU";
+		                		menuEffect();
+		                	}
+		                	letterEffect();
+		                }
+		                break;
+		            case Action.KEY.DOWN:
+		                if(Action.focusPos == "MENU") {
+		                	Action.focusPos = "LETTER";
+		                	letterEffect();
+		                }else if(Action.focusPos == "LETTER") {
+		                	if(letterListObj.focusPos == 0) {
+		                		letterListObj.changeList(1);
+		                		letterEffect();
+		                	}
+		                }else if(Action.focusPos == "INFO") {
+		                	if(infoListObj.focusPos==infoList.length-1){
+		                		Action.focusPos = "NEXT";
+		                		pageEffect();
+		                	}else{
+		                		infoListObj.changeList(1);
+		                		infoEffect();
+		                	}
+		                }
+		                break;
+		            case Action.KEY.LEFT:
+		            	if(Action.focusPos == "MENU") {
+		                	menuListObj.focusUp();
+		                	menuEffect();
+		               }else if(Action.focusPos == "LETTER") {
+		               		if(letterListObj.focusPos == 2){
+		               			letterListObj.focusUp();
+		                		letterEffect();
+		               		}
+		                }else if(Action.focusPos == "INFO") {
+		                	stopScroll(infoListObj,"info-list");
+		                	Action.focusPos = "LETTER";
+		                	letterEffect();
+		                }else if(Action.focusPos == "NEXT") {
+		                	Action.focusPos = "PREV";
+		                	pageEffect();
+		                }else if(Action.focusPos == "PREV") {
+		                	Action.focusPos = "LETTER";
+		                	letterEffect();
+		                }
+		                break;
+		            case Action.KEY.RIGHT:
+		                if(Action.focusPos == "MENU") {
+		                	menuListObj.focusDown();
+		                	menuEffect();
+		                }else if(Action.focusPos == "LETTER") {
+		                	if(letterListObj.focusPos == 0||letterListObj.focusPos == 2){
+		                		Action.focusPos = "INFO";
+		                		infoEffect();
+		                	}else{
+		                		letterListObj.focusDown();
+		                		letterEffect();
+		                	}
+		                }else if(Action.focusPos == "PREV") {
+		                	Action.focusPos = "NEXT";
+		                	pageEffect();
+		                }
+		                break;
+		
+		            case Action.KEY.ENTER:
+		             if(Action.focusPos == "MENU") {
+		             	    delCookie();
+		                	if(menuListObj.focusPos==0){
+		                		window.location.href="index.html";
+		                	}else{
+		                		var temp = menuListObj.dataList[menuListObj.focusPos];
+		                		window.location.href = "sub.html?menuFocusPos="+menuListObj.focusPos+"&name="+encodeURI(temp.name)+"&id="+temp.categoryId;
+		                	}
+		               }else if(Action.focusPos == "LETTER"){
+		               	    delCookie();
+		               	    setLetterCookie();
+		                	var temp = letterListObj.dataList[letterListObj.focusPos];
+		                	window.location.href = temp.url;
+		                }else if(Action.focusPos == "INFO") {
+		                	delCookie(); 
+		                	setInfoCookie();
+		                	var temp = infoListObj.dataList[infoListObj.focusPos];
+		                	window.location.href = "common/iFengPlayer.html?id="+temp.id+"&movassetid="+temp.movassetid;
+		                }else if(Action.focusPos == "NEXT") {
+		                	toPage(curPage+1);
+		                }else if(Action.focusPos == "PREV") {
+		                	toPage(curPage-1);
+		                }
+		                break;
+		            case Action.KEY.PAGEDOWN:
+		            	toPage(curPage+1);
+		            	break;
+		            case Action.KEY.PAGEUP:
+		            	toPage(curPage-1);
+		            	break;	
+		            case Action.KEY.BACK:
+		            	delCookie();
+		                location.href="index.html";               
+		                event.preventDefault();
+		                break;
+		            case Action.KEY.EXIT:
+		                delCookie();
+		                location.href="index.html";
+		                event.preventDefault();
+		                break;
+		        }
+		    }
+		    
+		    function setLetterCookie() {
+		    	setCookie("subPos",Action.focusPos);
+		    	//setCookie("subMenuPos",menuListObj.focusPos);
+		    	setCookie("subLetterPos",letterListObj.focusPos);
+		    }
+		    
+		    function setInfoCookie() {
+		    	setCookie("subPos",Action.focusPos);
+		    	setCookie("subInfoPos",infoListObj.focusPos);
+		    	setCookie("subCurPage",curPage);
+		    }
+		    
+		    function delCookie() {
+		    	DelCookie("subPos");
+		    	//DelCookie("subMenuPos");
+		    	DelCookie("subLetterPos");
+		    	DelCookie("subInfoPos");
+		    	DelCookie("subCurPage");
+		    }
+		     
+		    $(document).ready(function(){
+		    	Action.focusPos = "MENU";
+		    	//delCookie();
+		    	initFocus();
+		    	initPage();
+		    });
+		</script>
+	</body>
+</html>
